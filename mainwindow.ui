@@ -152,27 +152,17 @@ p, li { white-space: pre-wrap; }
      <string>Log</string>
     </property>
    </widget>
-   <widget class="QRadioButton" name="yue2chs_radioButton">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>96</y>
-      <width>101</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>粵語-&gt;简体</string>
-    </property>
-   </widget>
    <widget class="QRadioButton" name="yue2cht_radioButton">
     <property name="geometry">
      <rect>
-      <x>30</x>
-      <y>122</y>
-      <width>121</width>
+      <x>21</x>
+      <y>104</y>
+      <width>131</width>
       <height>20</height>
      </rect>
+    </property>
+    <property name="accessibleName">
+     <string>yue-cht</string>
     </property>
     <property name="text">
      <string>粵語-&gt;繁體</string>
@@ -181,27 +171,17 @@ p, li { white-space: pre-wrap; }
    <widget class="QRadioButton" name="zh2en_radioButton">
     <property name="geometry">
      <rect>
-      <x>30</x>
-      <y>172</y>
+      <x>21</x>
+      <y>164</y>
       <width>121</width>
       <height>20</height>
      </rect>
+    </property>
+    <property name="accessibleName">
+     <string>zh-en</string>
     </property>
     <property name="text">
      <string>中文-&gt;英文</string>
-    </property>
-   </widget>
-   <widget class="QRadioButton" name="chs2cht_radioButton">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>147</y>
-      <width>121</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>简体-&gt;繁體</string>
     </property>
    </widget>
    <widget class="QPushButton" name="start_pushButton">
@@ -248,6 +228,38 @@ p, li { white-space: pre-wrap; }
       <width>301</width>
       <height>21</height>
      </rect>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="yue2zh_radioButton">
+    <property name="geometry">
+     <rect>
+      <x>21</x>
+      <y>135</y>
+      <width>131</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="accessibleName">
+     <string>yue-zh</string>
+    </property>
+    <property name="text">
+     <string>粵語-&gt;简体</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="progress_label">
+    <property name="geometry">
+     <rect>
+      <x>444</x>
+      <y>268</y>
+      <width>191</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
     </property>
    </widget>
   </widget>

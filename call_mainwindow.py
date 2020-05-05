@@ -4,7 +4,7 @@ import time
 import base64
 from pathlib import Path
 
-from PyQt5.QtWidgets import QMainWindow, QFileDialog, QLineEdit
+from PyQt5.QtWidgets import QMainWindow, QFileDialog, QLineEdit, QMessageBox
 
 from ui_mainwindow import Ui_MainWindow
 from translate import baidu_translate
@@ -19,6 +19,8 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         self.appid = ''
         self.secretkey = ''
         self.is_premium = False
+        self.from_lang = 'yue'
+        self.to_lang = 'cht'
 
         # 檢測是否以記住帳戶信息。
         p = Path('login_info')
@@ -35,6 +37,13 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         # 登陸操作。
         self.login_pushButton.clicked.connect(self.login)
         self.remember_checkBox.toggled.connect(self.del_info)
+
+        # 選擇語言。
+        self.yue2cht_radioButton.setChecked(True)
+        self.yue2cht_radioButton.toggled.connect(self.ch_lang)
+        self.yue2zh_radioButton.toggled.connect(self.ch_lang)
+        self.zh2en_radioButton.toggled.connect(self.ch_lang)
+        self.zh2en_radioButton.clicked.connect(self.ch_en_lang_alert)
 
         # 翻譯操作。
         self.openfile_pushButton.clicked.connect(self.openfile)
@@ -111,6 +120,20 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         '''重新打印日誌。'''
         self.logging_textBrowser.setText(text)
 
+    def ch_lang(self):
+        '''更改翻譯語言。'''
+        lang_radio_btn = self.sender()
+        if lang_radio_btn.isChecked():
+            # lang_radio_btn 的 accessibleName 的值在 UI 設計時已設定為:
+            # <from_lang>-<to_lang> eg. 'yue-cht'
+            self.from_lang, self.to_lang = lang_radio_btn.accessibleName().split('-')
+            print(self.from_lang, self.to_lang)
+
+    def ch_en_lang_alert(self):
+        alert = QMessageBox()
+        alert.setText('建議翻譯前將中文語句理順，可以提高翻譯質量。')
+        alert.exec_()
+
     def openfile(self):
         '''獲取文件路徑。'''
         filename, filetype = QFileDialog.getOpenFileName(self,
@@ -123,6 +146,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
 
     def start(self):
         '''獲取翻譯並生成 srt 翻譯文件。'''
+        self.new_log('正在翻譯...')
         path = Path(self.filepath_label.text())
         if not path.is_file():
             self.new_log('請先選擇 SRT 文件。')
@@ -130,20 +154,41 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
 
         self.start_pushButton.setDisabled(True)
         try:
-            # TODO: 選擇語言。
-            trans_gen = translate_srt(path, is_premium=self.is_premium)  # 生成器用於進度條。
+            trans_gen = translate_srt(path,
+                                      is_premium=self.is_premium,
+                                      from_lang=self.from_lang,
+                                      to_lang=self.to_lang)  # 生成器用於進度條。
 
-            maximum = trans_gen.send(None)   # 第一個返回的是 total_count 總字數。
-            self.trans_progressBar.setMaximum(maximum)
-
-            new_path = ''
-            # 之後返回值 count 是已經處理的字數。
-            for count in trans_gen:
-                self.trans_progressBar.setValue(count)
-
-            self.new_log('翻譯完成！')
-            self.log(f'文件路徑：{Path(new_path + "_translated.srt").absolute().__str__()}')
-            self.start_pushButton.setDisabled(False)
         except Exception as e:
             print(e)
+            self.new_log(e)
 
+        else:
+            maximum = trans_gen.send(None)   # 第一個返回的是 total_count 總字數。
+            self.progress_label.setText(f'共 {maximum} 字')
+            self.trans_progressBar.setMaximum(maximum)
+
+            # 之後返回值 count 是已經處理的字數。
+            for value in trans_gen:
+                if type(value) == int:
+                    step = maximum - value
+                    self.trans_progressBar.setValue(step)
+                    self.progress_label.setText(f'已翻譯 {step} / {maximum} 字')
+                else:
+                    # 生成器最後一個返回值是路徑，是字符串，有且只有這個返回值是字符串。
+                    new_path = value
+                    self.new_log(f'翻譯文件路徑： {new_path}')
+
+            # 日誌。
+
+            # 提醒。
+            alert = QMessageBox()
+            alert.setText('翻譯完成！')
+            alert.exec_()
+
+            # 清空路徑，以免重複提交翻譯。
+            self.filepath_label.setText('')
+
+        finally:
+            self.trans_progressBar.setValue(0)
+            self.start_pushButton.setDisabled(False)
