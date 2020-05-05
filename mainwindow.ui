@@ -152,27 +152,27 @@ p, li { white-space: pre-wrap; }
      <string>Log</string>
     </property>
    </widget>
-   <widget class="QRadioButton" name="yue2zh_radioButton">
+   <widget class="QRadioButton" name="yue2cht_radioButton">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>110</y>
+      <x>21</x>
+      <y>104</y>
       <width>131</width>
       <height>20</height>
      </rect>
     </property>
     <property name="accessibleName">
-     <string>yue-zh</string>
+     <string>yue-cht</string>
     </property>
     <property name="text">
-     <string>粵語口語-&gt;書面語</string>
+     <string>粵語-&gt;繁體</string>
     </property>
    </widget>
    <widget class="QRadioButton" name="zh2en_radioButton">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>150</y>
+      <x>21</x>
+      <y>164</y>
       <width>121</width>
       <height>20</height>
      </rect>
@@ -228,6 +228,22 @@ p, li { white-space: pre-wrap; }
       <width>301</width>
       <height>21</height>
      </rect>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="yue2zh_radioButton">
+    <property name="geometry">
+     <rect>
+      <x>21</x>
+      <y>135</y>
+      <width>131</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="accessibleName">
+     <string>yue-zh</string>
+    </property>
+    <property name="text">
+     <string>粵語-&gt;简体</string>
     </property>
    </widget>
   </widget>

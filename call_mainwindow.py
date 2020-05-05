@@ -4,7 +4,7 @@ import time
 import base64
 from pathlib import Path
 
-from PyQt5.QtWidgets import QMainWindow, QFileDialog, QLineEdit
+from PyQt5.QtWidgets import QMainWindow, QFileDialog, QLineEdit, QMessageBox
 
 from ui_mainwindow import Ui_MainWindow
 from translate import baidu_translate
@@ -20,7 +20,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         self.secretkey = ''
         self.is_premium = False
         self.from_lang = 'yue'
-        self.to_lang = 'zh'
+        self.to_lang = 'cht'
 
         # 檢測是否以記住帳戶信息。
         p = Path('login_info')
@@ -39,9 +39,11 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         self.remember_checkBox.toggled.connect(self.del_info)
 
         # 選擇語言。
-        self.yue2zh_radioButton.setChecked(True)
+        self.yue2cht_radioButton.setChecked(True)
+        self.yue2cht_radioButton.toggled.connect(self.ch_lang)
         self.yue2zh_radioButton.toggled.connect(self.ch_lang)
         self.zh2en_radioButton.toggled.connect(self.ch_lang)
+        self.zh2en_radioButton.clicked.connect(self.ch_en_lang_alert)
 
         # 翻譯操作。
         self.openfile_pushButton.clicked.connect(self.openfile)
@@ -119,10 +121,18 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         self.logging_textBrowser.setText(text)
 
     def ch_lang(self):
+        '''更改翻譯語言。'''
         lang_radio_btn = self.sender()
         if lang_radio_btn.isChecked():
+            # lang_radio_btn 的 accessibleName 的值在 UI 設計時已設定為:
+            # <from_lang>-<to_lang> eg. 'yue-cht'
             self.from_lang, self.to_lang = lang_radio_btn.accessibleName().split('-')
             print(self.from_lang, self.to_lang)
+
+    def ch_en_lang_alert(self):
+        alert = QMessageBox()
+        alert.setText('建議翻譯前將中文語句理順，可以提高翻譯質量。')
+        alert.exec_()
 
     def openfile(self):
         '''獲取文件路徑。'''
@@ -152,14 +162,23 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
             maximum = trans_gen.send(None)   # 第一個返回的是 total_count 總字數。
             self.trans_progressBar.setMaximum(maximum)
 
-            new_path = ''
             # 之後返回值 count 是已經處理的字數。
             for count in trans_gen:
                 self.trans_progressBar.setValue(count)
 
-            self.new_log('翻譯完成！')
-            self.log(f'文件路徑：{Path(new_path + "_translated.srt").absolute().__str__()}')
+
+            # 日誌。
+            new_path = Path(path).absolute().__str__().replace(".srt", f'_translated_{self.to_lang}.srt')
+            self.new_log(f'翻譯文件路徑： {new_path}')
+
+            # 提醒。
+            alert = QMessageBox()
+            alert.setText('翻譯完成！')
+            alert.exec_()
+
+            # 清空路徑，以免重複提交翻譯。
+            self.filepath_label.setText('')
             self.start_pushButton.setDisabled(False)
+
         except Exception as e:
             print(e)
-
