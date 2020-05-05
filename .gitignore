@@ -1,0 +1,18 @@
+# Pycharm
+.idea/
+
+# Build
+src/resources/base/audio/
+target/
+
+# Files
+audio/
+__pycache__/
+test/
+*.m4a
+*.wav
+*.srt
+
+# Config
+private.py
+login_info*
