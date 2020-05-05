@@ -74,23 +74,10 @@ def translate_srt(path, from_lang='auto', to_lang='zh', is_premium=False, limit=
             print('字數未超過限制，未發出請求。')
             to_translate_parts.append(line)
 
-    # 簡體中文。
-    if to_lang == 'zh':
-        new_path = path.name.replace(".srt", "_translated_chs.srt")
-        write_srt(new_path, path, translations)
-        yield new_path
-    # 繁體中文。
-    elif to_lang == 'cht':
-        new_path = path.name.replace(".srt", "_translated_cht.srt")
-        write_srt(new_path, path, translations)
-        yield new_path
-    # 英文。
-    elif to_lang == 'en':
-        new_path = path.name.replace(".srt", "_translated_en.srt")
-        write_srt(new_path, path, translations)
-        yield new_path
-    else:
-        print(f'暫未支持此語言 - {to_lang}')
+    # 最後返回翻譯文件的絕對路徑字符串。
+    new_path = path.name.replace('.srt', f'_translated_{to_lang}.srt')
+    new_path.replace('zh.srt', 'chs.srt')
+    yield Path(new_path).absolute().__str__()
 
 
 def get_chinese_lines(path):

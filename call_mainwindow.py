@@ -173,7 +173,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
                 else:
                     # 生成器最後一個返回值是路徑，是字符串，有且只有這個返回值是字符串。
                     new_path = value
-                    self.new_log(f'翻譯文件路徑： {Path(new_path).absolute().__str__()}')
+                    self.new_log(f'翻譯文件路徑： {new_path}')
 
             # 日誌。
 
