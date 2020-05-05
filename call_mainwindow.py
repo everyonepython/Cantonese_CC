@@ -146,6 +146,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
 
     def start(self):
         '''獲取翻譯並生成 srt 翻譯文件。'''
+        self.new_log('正在翻譯...')
         path = Path(self.filepath_label.text())
         if not path.is_file():
             self.new_log('請先選擇 SRT 文件。')
@@ -186,4 +187,5 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
             self.filepath_label.setText('')
 
         finally:
+            self.trans_progressBar.setValue(0)
             self.start_pushButton.setDisabled(False)
