@@ -167,12 +167,15 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
             self.trans_progressBar.setMaximum(maximum)
 
             # 之後返回值 count 是已經處理的字數。
-            for total_count in trans_gen:
-                self.trans_progressBar.setValue(maximum - total_count)
+            for value in trans_gen:
+                if type(value) == int:
+                    self.trans_progressBar.setValue(maximum - value)
+                else:
+                    # 生成器最後一個返回值是路徑，是字符串，有且只有這個返回值是字符串。
+                    new_path = value
+                    self.new_log(f'翻譯文件路徑： {Path(new_path).absolute().__str__()}')
 
             # 日誌。
-            new_path = Path(path).absolute().__str__().replace(".srt", f'_translated_{self.to_lang}.srt')
-            self.new_log(f'翻譯文件路徑： {new_path}')
 
             # 提醒。
             alert = QMessageBox()

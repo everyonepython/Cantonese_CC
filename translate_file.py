@@ -78,14 +78,17 @@ def translate_srt(path, from_lang='auto', to_lang='zh', is_premium=False, limit=
     if to_lang == 'zh':
         new_path = path.name.replace(".srt", "_translated_chs.srt")
         write_srt(new_path, path, translations)
+        yield new_path
     # 繁體中文。
     elif to_lang == 'cht':
         new_path = path.name.replace(".srt", "_translated_cht.srt")
         write_srt(new_path, path, translations)
+        yield new_path
     # 英文。
     elif to_lang == 'en':
         new_path = path.name.replace(".srt", "_translated_en.srt")
         write_srt(new_path, path, translations)
+        yield new_path
     else:
         print(f'暫未支持此語言 - {to_lang}')
 
