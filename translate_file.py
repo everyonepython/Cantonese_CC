@@ -76,7 +76,8 @@ def translate_srt(path, from_lang='auto', to_lang='zh', is_premium=False, limit=
 
     # 最後返回翻譯文件的絕對路徑字符串。
     new_path = path.name.replace('.srt', f'_translated_{to_lang}.srt')
-    new_path.replace('zh.srt', 'chs.srt')
+    new_path = new_path.replace('zh.srt', 'chs.srt')
+    write_srt(new_path, path, translations)
     yield Path(new_path).absolute().__str__()
 
 
