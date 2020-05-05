@@ -33,7 +33,7 @@ def translate_srt(path, from_lang='auto', to_lang='zh', is_premium=False, limit=
     for line in to_translate_lines:
         count += len(line)
         total_count -= len(line)
-        yield count
+        yield total_count
         # Get 請求不能超過 1000 字，這裏設限制在 950 字。
         # 文本不足 950 字只需發送一次請求，或者超過限制文本的最後一部分請求。
         if count < limit and total_count == 0:

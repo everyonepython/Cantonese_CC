@@ -153,19 +153,22 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
 
         self.start_pushButton.setDisabled(True)
         try:
-            # TODO: 選擇語言。
             trans_gen = translate_srt(path,
                                       is_premium=self.is_premium,
                                       from_lang=self.from_lang,
                                       to_lang=self.to_lang)  # 生成器用於進度條。
 
+        except Exception as e:
+            print(e)
+            self.new_log(e)
+
+        else:
             maximum = trans_gen.send(None)   # 第一個返回的是 total_count 總字數。
             self.trans_progressBar.setMaximum(maximum)
 
             # 之後返回值 count 是已經處理的字數。
-            for count in trans_gen:
-                self.trans_progressBar.setValue(count)
-
+            for total_count in trans_gen:
+                self.trans_progressBar.setValue(maximum - total_count)
 
             # 日誌。
             new_path = Path(path).absolute().__str__().replace(".srt", f'_translated_{self.to_lang}.srt')
@@ -178,7 +181,6 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
 
             # 清空路徑，以免重複提交翻譯。
             self.filepath_label.setText('')
-            self.start_pushButton.setDisabled(False)
 
-        except Exception as e:
-            print(e)
+        finally:
+            self.start_pushButton.setDisabled(False)
