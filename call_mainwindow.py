@@ -19,6 +19,8 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         self.appid = ''
         self.secretkey = ''
         self.is_premium = False
+        self.from_lang = 'yue'
+        self.to_lang = 'zh'
 
         # 檢測是否以記住帳戶信息。
         p = Path('login_info')
@@ -35,6 +37,11 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         # 登陸操作。
         self.login_pushButton.clicked.connect(self.login)
         self.remember_checkBox.toggled.connect(self.del_info)
+
+        # 選擇語言。
+        self.yue2zh_radioButton.setChecked(True)
+        self.yue2zh_radioButton.toggled.connect(self.ch_lang)
+        self.zh2en_radioButton.toggled.connect(self.ch_lang)
 
         # 翻譯操作。
         self.openfile_pushButton.clicked.connect(self.openfile)
@@ -111,6 +118,12 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         '''重新打印日誌。'''
         self.logging_textBrowser.setText(text)
 
+    def ch_lang(self):
+        lang_radio_btn = self.sender()
+        if lang_radio_btn.isChecked():
+            self.from_lang, self.to_lang = lang_radio_btn.accessibleName().split('-')
+            print(self.from_lang, self.to_lang)
+
     def openfile(self):
         '''獲取文件路徑。'''
         filename, filetype = QFileDialog.getOpenFileName(self,
@@ -131,7 +144,10 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         self.start_pushButton.setDisabled(True)
         try:
             # TODO: 選擇語言。
-            trans_gen = translate_srt(path, is_premium=self.is_premium)  # 生成器用於進度條。
+            trans_gen = translate_srt(path,
+                                      is_premium=self.is_premium,
+                                      from_lang=self.from_lang,
+                                      to_lang=self.to_lang)  # 生成器用於進度條。
 
             maximum = trans_gen.send(None)   # 第一個返回的是 total_count 總字數。
             self.trans_progressBar.setMaximum(maximum)

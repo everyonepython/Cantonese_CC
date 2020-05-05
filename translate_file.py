@@ -80,22 +80,28 @@ def translate_srt(path, from_lang='auto', to_lang='zh', is_premium=False, limit=
                 to_translate_parts.append(line)
 
 
-        new_path = f'{path.name}_translated.srt'
+        if to_lang == 'zh':
+            new_path = path.name.replace(".srt", "_translated_chs.srt")
+            cht_path = path.name.replace(".srt", "_translated_cht.srt")
+        elif to_lang == 'en':
+            new_path = path.name.replace(".srt", "_translated_en.srt")
+
         with open(new_path, 'w') as n_file:
-            with open(new_path) as o_file:
+            with open(path) as o_file:
                 lines = o_file.readlines()
                 # 在原文中每一行，找到對應的文字，然後替換成譯文。
                 # 請求結果 translation 是一個列表，每一項都是一個字典，每一個字典都有兩個鍵。具體如下：
                 # [{'src': '<原文1>', 'dst': '<譯文1>'}, {'src': '<原文2>', 'dst': '<譯文2>'}]
                 # 遍歷每一行，然後在字典中找到對應的原文，替換成譯文。
                 # 之前寫過的一些用爬蟲的翻譯，由於獲得返回結果後沒有與原文生成一個字典的關係，因此後期排版難度大。
+                copy_lines = lines.copy()
                 for i, line in enumerate(lines):
                     for td in translations:
                         source = td.get('src')
                         translation = td.get('dst')
                         if source  == line.strip():
-                            lines[i] = translation + '\n'
-                n_file.writelines(lines)
+                            copy_lines[i] = translation + '\n'
+                n_file.writelines(copy_lines)
 
 
 if __name__ == '__main__':
