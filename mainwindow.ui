@@ -246,6 +246,22 @@ p, li { white-space: pre-wrap; }
      <string>粵語-&gt;简体</string>
     </property>
    </widget>
+   <widget class="QLabel" name="progress_label">
+    <property name="geometry">
+     <rect>
+      <x>444</x>
+      <y>268</y>
+      <width>191</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">

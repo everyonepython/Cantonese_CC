@@ -165,12 +165,15 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
 
         else:
             maximum = trans_gen.send(None)   # 第一個返回的是 total_count 總字數。
+            self.progress_label.setText(f'共 {maximum} 字')
             self.trans_progressBar.setMaximum(maximum)
 
             # 之後返回值 count 是已經處理的字數。
             for value in trans_gen:
                 if type(value) == int:
-                    self.trans_progressBar.setValue(maximum - value)
+                    step = maximum - value
+                    self.trans_progressBar.setValue(step)
+                    self.progress_label.setText(f'已翻譯 {step} / {maximum} 字')
                 else:
                     # 生成器最後一個返回值是路徑，是字符串，有且只有這個返回值是字符串。
                     new_path = value
