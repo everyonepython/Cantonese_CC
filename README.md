@@ -47,12 +47,12 @@ cd cantonese__cc
 
 - 安裝此工具需要的 python 庫。
 ```bash
-pip install requirements.txt
+pip3 install requirements.txt
 ```
 
 - 開啟軟件。
 ```bash
-python main.py
+python3 main.py
 ```
 
 ### （二）執行文件
