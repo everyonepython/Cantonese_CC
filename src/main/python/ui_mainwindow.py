@@ -94,7 +94,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "Translate spoken Cantonese to written Chinese"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Better Cantonese CC"))
         self.appid_label.setText(_translate("MainWindow", "appid"))
         self.remember_checkBox.setText(_translate("MainWindow", "Remember Login"))
         self.secretkey_label.setText(_translate("MainWindow", "secretKey"))
