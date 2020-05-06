@@ -32,7 +32,6 @@ def translate_srt(path, appid, secretkey, from_lang='auto', to_lang='zh', is_pre
     for line in to_translate_lines:
         count += len(line)
         total_count -= len(line)
-        yield total_count
         # Get 請求不能超過 1000 字，這裏設限制在 950 字。
         # 文本不足 950 字只需發送一次請求，或者超過限制文本的最後一部分請求。
         if count < limit and total_count == 0:
@@ -41,23 +40,27 @@ def translate_srt(path, appid, secretkey, from_lang='auto', to_lang='zh', is_pre
 
             # 發送請求。
             res = baidu_translate('\n'.join(to_translate_parts),
-                                  appid=appid,
-                                  secretkey=secretkey,
+                                  appid,
+                                  secretkey,
                                   from_lang=from_lang,
                                   to_lang=to_lang)
             print(res)
             translations += res.get('trans_result')
 
             parts += 1
+            yield total_count
             print(f'This is part {parts}.')
             print(translations)
-            break
 
         # 每當檢測到即將超過 950 字，就將__此行文本之前__的部分本文發出請求。
         elif count >= limit and total_count > 0:
             print(f'讀取字數 {count}, 剩餘字數{total_count}')
             # 發送請求。
-            res = baidu_translate('\n'.join(to_translate_parts), from_lang=from_lang, to_lang=to_lang)
+            res = baidu_translate('\n'.join(to_translate_parts),
+                                  appid,
+                                  secretkey,
+                                  from_lang=from_lang,
+                                  to_lang=to_lang)
             translations += res.get('trans_result')
 
             # 此行之前部分文本已翻譯。須清空待翻譯文本列表，再裝載這行文本。
