@@ -69,6 +69,7 @@ def translate_srt(path, appid, secretkey, from_lang='auto', to_lang='zh', is_pre
 
             count = 0
             parts += 1
+            yield total_count
             print(f'This is part{parts}')
             print(translations)
             if is_premium:
