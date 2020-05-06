@@ -1,9 +1,8 @@
+# coding=utf-8
 import time
 import math
 from pathlib import Path
 from pprint import pprint
-
-from hanziconv import HanziConv
 
 from utils import is_contains_chinese
 from translate import baidu_translate
