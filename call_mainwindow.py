@@ -155,6 +155,8 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         self.start_pushButton.setDisabled(True)
         try:
             trans_gen = translate_srt(path,
+                                      appid=self.appid,
+                                      secretkey=self.secretkey,
                                       is_premium=self.is_premium,
                                       from_lang=self.from_lang,
                                       to_lang=self.to_lang)  # 生成器用於進度條。

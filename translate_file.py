@@ -8,7 +8,7 @@ from utils import is_contains_chinese
 from translate import baidu_translate
 
 
-def translate_srt(path, from_lang='auto', to_lang='zh', is_premium=False, limit=950):
+def translate_srt(path, appid, secretkey, from_lang='auto', to_lang='zh', is_premium=False, limit=950):
     '''
     翻譯一個 SRT 文件，生成文件後不會改動任何排版。
     可以改寫 translate() 函數接駁其他 API。
@@ -40,7 +40,12 @@ def translate_srt(path, from_lang='auto', to_lang='zh', is_premium=False, limit=
             to_translate_parts.append(line)
 
             # 發送請求。
-            res = baidu_translate('\n'.join(to_translate_parts), from_lang=from_lang, to_lang=to_lang)
+            res = baidu_translate('\n'.join(to_translate_parts),
+                                  appid=appid,
+                                  secretkey=secretkey,
+                                  from_lang=from_lang,
+                                  to_lang=to_lang)
+            print(res)
             translations += res.get('trans_result')
 
             parts += 1

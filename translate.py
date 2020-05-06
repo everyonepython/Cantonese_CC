@@ -8,7 +8,9 @@ from pprint import pprint
 
 import requests
 
-from private import appid, secretkey
+
+my_appid = ''  # 帳號
+my_secretkey = '' # 密鑰
 
 
 def unicode2zh(string):
@@ -16,7 +18,7 @@ def unicode2zh(string):
     return string.encode('utf-8').decode('unicode-escape')
 
 
-def baidu_translate(q, appid=appid, secretkey=secretkey, from_lang='auto', to_lang='zh'):
+def baidu_translate(q, appid, secretkey, from_lang='auto', to_lang='zh'):
     '''
     Return: res_dict
     Success: {"from":"yue",
@@ -71,5 +73,5 @@ if __name__ == '__main__':
     else:
         q = '呢个系一个测试文件，我宜家写紧嘅系广东话。'
         from_lang = 'yue'
-    res = baidu_translate(q, from_lang=from_lang)
+    res = baidu_translate(q, my_appid, my_secretkey, from_lang=from_lang)
     print(res)
