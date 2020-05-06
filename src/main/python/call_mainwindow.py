@@ -62,7 +62,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         print(f'secretkey {self.secretkey}')
 
     def remember_info(self):
-        with open('login_info', 'wb') as f:
+        with open('ccc_login_info', 'wb') as f:
             info = base64.b64encode(f'{self.appid}-{self.secretkey}'.encode('utf8'))
             f.write(info)
 
