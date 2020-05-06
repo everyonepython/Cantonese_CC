@@ -22,6 +22,8 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         self.from_lang = 'yue'
         self.to_lang = 'cht'
 
+        # 未登陸前禁止發出請求。
+        self.start_pushButton.setDisabled(True)
         # 檢測是否以記住帳戶信息。
         p = Path('login_info')
         if p.exists():
@@ -92,24 +94,29 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
             test_translation = res.get('trans_result')
             print(res)
 
-            # 連續發起兩次請求，第二次驗證是否高級版。
-            # 第一次請求。
+            # 連續發起兩次請求。
+            # 第一次請求，驗證帳號密鑰是否正確。
             if test_translation and i == 0:
-                self.login_pushButton.setDisabled(True)
+                self.login_pushButton.setDisabled(True)   # 驗證成功後，不需要再次登陸。
+                self.start_pushButton.setDisabled(False)  # 登陸後允許發出翻譯請求。
+                self.appid_lineEdit.setDisabled(True)  # 登陸成功後禁止修改帳號密碼。
+                self.secretkey_lineEdit.setDisabled(True)
                 if self.remember_checkBox.isChecked():
                     self.remember_info()
-                    self.appid_lineEdit.setDisabled(True)
-                    self.secretkey_lineEdit.setDisabled(True)
-                self.log('驗證成功！')
-            # 第二次請求。
+                self.new_log('驗證成功！')
+            # 第二次請求，驗證是否高級版 API，可以調整請求速度。
             elif test_translation and i == 1:
                 self.is_premium = True
                 self.log('API權限 - 高級版')
-            elif res.get('code') == '45003' and i == 1:
+            # 錯誤代碼解釋。
+            elif res.get('error_code') == '45003' and i == 1:
                 self.log('API權限 - 普通版\n')
+            elif res.get('error_code') == '52003':
+                self.new_log('請檢查 appid 或 secretkey 是否正確。')
+            # 其他錯誤代碼。
             else:
                 print(res)
-                self.log(json.dumps(res))
+                self.new_log(json.dumps(res))
 
     def log(self, new_text):
         '''繼續打印日誌。'''
@@ -146,6 +153,10 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
 
     def start(self):
         '''獲取翻譯並生成 srt 翻譯文件。'''
+        if len(self.appid) != 17 and len(self.secretkey) != 20:
+            self.new_log('請檢查 appid 或 secretkey 是否正確。')
+            return
+
         self.new_log('正在翻譯...')
         path = Path(self.filepath_label.text())
         if not path.is_file():
