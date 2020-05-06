@@ -90,7 +90,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         '''
         test_translation = ''
         for i in range(2):
-            res = baidu_translate('呢個係登陸測試！', appid=self.appid, secretkey=self.secretkey)
+            res = baidu_translate('呢個係登陸測試！', self.appid, self.secretkey, from_lang='yue')
             test_translation = res.get('trans_result')
             print(res)
 
