@@ -56,7 +56,10 @@ python3 main.py
 ```
 
 ### （二）執行文件
-按自己的操作系統，下載已打包好的執行文件。
+根據自己的操作系統，下載已打包好的軟件。
+軟件發布地址：
+https://github.com/everyonepython/cantonese__cc/releases
+
 解壓後，找到執行文件的位置:
 - Mac
 ```bash

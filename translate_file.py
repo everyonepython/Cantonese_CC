@@ -69,6 +69,7 @@ def translate_srt(path, appid, secretkey, from_lang='auto', to_lang='zh', is_pre
 
             count = 0
             parts += 1
+            yield total_count
             print(f'This is part{parts}')
             print(translations)
             if is_premium:
@@ -82,7 +83,8 @@ def translate_srt(path, appid, secretkey, from_lang='auto', to_lang='zh', is_pre
             to_translate_parts.append(line)
 
     # 最後返回翻譯文件的絕對路徑字符串。
-    new_path = path.name.replace('.srt', f'_translated_{to_lang}.srt')
+    new_path = path.absolute().__str__().replace('.srt', f'_translated_{to_lang}.srt')
+    print(new_path)
     new_path = new_path.replace('zh.srt', 'chs.srt')
     write_srt(new_path, path, translations)
     yield Path(new_path).absolute().__str__()
