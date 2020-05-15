@@ -25,11 +25,9 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         # 未登陸前禁止發出請求。
         self.start_pushButton.setDisabled(True)
         # 檢測是否以記住帳戶信息。
-        p = Path('login_info')
-        if p.exists():
-            self.remember_checkBox.setChecked(True)
-            self.get_info()
-            self.login()
+        self.remember_checkBox.setChecked(True)
+        self.get_info()
+        self.login()
 
         # 帳戶信息。
         self.appid_lineEdit.textChanged.connect(self.set_appid)
@@ -55,11 +53,9 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
 
     def set_appid(self):
         self.appid = self.appid_lineEdit.text()
-        print(f'appid {self.appid}')
 
     def set_secretkey(self):
         self.secretkey = self.secretkey_lineEdit.text()
-        print(f'secretkey {self.secretkey}')
 
     def remember_info(self):
         with open('login_info', 'wb') as f:
@@ -75,12 +71,18 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         self.login_pushButton.setDisabled(False)
 
     def get_info(self):
-        with open('login_info', 'rb') as f:
-            b_info = f.read()
-            info = base64.b64decode(b_info).decode('utf8')
-            self.appid, self.secretkey = info.split('-')
-            self.appid_lineEdit.setText(self.appid)
-            self.secretkey_lineEdit.setText(self.secretkey)
+        p = Path('login_info')
+        if p.exists():
+            with open('login_info', 'rb') as f:
+                b_info = f.read()
+        else:  # Test Account
+            from info import sharekey
+            b_info = sharekey
+
+        info = base64.b64decode(b_info).decode('utf8')
+        self.appid, self.secretkey = info.split('-')
+        self.appid_lineEdit.setText(self.appid)
+        self.secretkey_lineEdit.setText(self.secretkey)
 
     def login(self):
         '''
