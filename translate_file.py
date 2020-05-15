@@ -92,7 +92,7 @@ def translate_srt(path, appid, secretkey, from_lang='auto', to_lang='zh', is_pre
 
 def get_chinese_lines(path):
     '''讀取srt文件，把有中文的行，即對白取出。'''
-    with open(path) as file:
+    with open(path, 'r', encoding='utf-8') as file:
         lines = file.readlines()
         chinese_lines = []
         for line in lines:
@@ -106,8 +106,8 @@ def write_srt(new_path, old_path, translations):
     translations 是一個列表，每一項都是一個字典，每一個字典都有兩個鍵。具體如下：
     [{'src': '<原文1>', 'dst': '<譯文1>'}, {'src': '<原文2>', 'dst': '<譯文2>'}]
     '''
-    with open(new_path, 'w') as n_file:
-        with open(old_path) as o_file:
+    with open(new_path, 'w', encoding='utf8') as n_file:
+        with open(old_path, 'r', encoding='utf8') as o_file:
             lines = o_file.readlines()
             # 在原文中每一行，找到對應的文字，然後替換成譯文。
             # 請求結果 translations 是一個列表，每一項都是一個字典，每一個字典都有兩個鍵。具體如下：
