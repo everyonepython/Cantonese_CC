@@ -109,7 +109,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
                 self.is_premium = True
                 self.log('API權限 - 高級版')
             # 錯誤代碼解釋。
-            elif res.get('error_code') == '45003' and i == 1:
+            elif res.get('error_code') == '54003' and i == 1:
                 self.log('API權限 - 普通版\n')
             elif res.get('error_code') == '52003':
                 self.new_log('請檢查 appid 或 secretkey 是否正確。')
