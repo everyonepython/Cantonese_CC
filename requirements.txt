@@ -3,4 +3,4 @@ future==0.18.2
 PyQt5==5.13.0
 PyQt5-sip==12.7.2
 requests==2.23.0
-urllib3==1.25.9
+urllib3==1.26.5
