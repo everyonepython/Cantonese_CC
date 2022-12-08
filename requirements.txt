@@ -1,4 +1,4 @@
-certifi==2020.4.5.1
+certifi==2022.12.7
 future==0.18.2
 PyQt5==5.13.0
 PyQt5-sip==12.7.2
